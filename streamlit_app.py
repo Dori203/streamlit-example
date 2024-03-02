@@ -24,13 +24,9 @@ import json
 # import pandas as pd
 
 """
-# Welcome to Streamlit!
+# Stable diffusion clusterer!
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
-
-In the meantime, below is an example of what you can do with just a few lines of code:
+Enter a word or phrase: Explore how AI art interprets your ideas! This app uses Stable Diffusion to find similar concepts and show different images created from them.
 """
 
  # params
@@ -121,6 +117,8 @@ def run_query():
  image_url = df['image_URI'].values.tolist()
  samples_num = len(sentences)
  st.text("printing stuff")
+ st.text(str(samples_num) + " prompts")
+ st.text(str(len(GRID_COUNTER)) + " images removed")
  # print(str(samples_num) + ' prompts')
  # print (str(len(GRID_COUNTER)) + " images removed")
 
