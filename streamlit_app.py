@@ -22,6 +22,7 @@ import json
 # from dash import Dash, dcc, html, Input, Output, no_update
 # import plotly.graph_objects as go
 # import pandas as pd
+from simpletransformers.language_representation import RepresentationModel
 
 """
 # Stable diffusion clusterer!
@@ -130,14 +131,13 @@ st.button("Run query", key=None, help=None, on_click=run_query)
 """
 
 
-from simpletransformers.language_representation import RepresentationModel
 # model_types = bert, robeta, gpt2
 # model_name = roberta-base, gpt2-medium,
 def run_plm():
  model = RepresentationModel(
          model_type="roberta",
          model_name="roberta-base",
-         use_cuda=True
+         use_cuda=False
          )
  sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
  norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
