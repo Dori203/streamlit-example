@@ -47,7 +47,7 @@ umap_embedding = False # @param {type:"boolean"}
 # TOP_WORDS =  6 # @param {type:"slider", min:1, max:10, step:1}
 
 MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 998)
-cluster_threshold = st.slider("Cluster threshole", 0.05, 1, 0.15)
+cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
 num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
 TOP_WORDS =  st.slider("number of top words", 1, 10, 6)
 num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
