@@ -130,15 +130,24 @@ st.button("Run query", key=None, help=None, on_click=run_query)
 """
 
 
+from simpletransformers.language_representation import RepresentationModel
+# model_types = bert, robeta, gpt2
+# model_name = roberta-base, gpt2-medium,
+def run_plm():
+ model = RepresentationModel(
+         model_type="roberta",
+         model_name="roberta-base",
+         use_cuda=True
+         )
+ sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
+ norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
+ sentence_vactor_normalized = sentence_vectors / norm[:,None]
+ sentences_np = np.array(sentences, dtype=object)
+ image_urls_np = np.array(image_url, dtype=object)
+ meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
+ X_emb = sentence_vactor_normalized
 
-
-
-
-
-
-
-
-
+st.button("Run embedding", key=None, help=None, on_click=run_plm)
 
 
 
