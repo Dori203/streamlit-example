@@ -55,6 +55,87 @@ num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
 num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
 
 
+
+PROMPT_URI = []
+GRID_COUNTER = []
+
+def merge_modifiers(modifier_list):
+  if (join_modifiers):
+    modifier_list = ['_'.join(s.split()) for s in modifier_list]
+  result = " ".join(modifier_list)
+  return result
+
+def next_page(api_url):
+  new =  api_url[:-1] + str(int(api_url[-1:])+1)
+  print(new)
+  return new
+
+def fetch_2(api_url):
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        data = response.json()
+        if data and "prompts" in data and data["prompts"]:
+            for result in data["prompts"]:
+              if "is_grid" in result["model_parameters"] and result["model_parameters"]["is_grid"] != 1:
+                # image_uri = result["generations"][0]["image_uri"]
+                image_uri = result["generations"][0]["thumbnail_uri"]
+                prompt = result["prompt"]
+                modifiers = result["modifiers"]
+                if (use_modifiers):
+                  prompt = merge_modifiers(modifiers)
+                PROMPT_URI.append((prompt, image_uri))
+              else:
+                GRID_COUNTER.append("uri")
+                # print("removed grid image.")
+            #fetch next
+            if len(PROMPT_URI) <= MAX_PROMPTS -1:
+              print("fetching next page")
+              fetch_2(next_page(api_url))
+    print(len(PROMPT_URI))
+    return
+
+def parse_results(results):
+  for result in results:
+      image_uri = result["generations"][0]["image_uri"]
+      prompt = result["prompt"]
+      PROMPT_URI.append((prompt, image_uri))
+  return
+
+# Function to send REST API request and extract image_uri
+def get_responses(prompt):
+    # api_url = f"https://devapi.krea.ai/prompts/?format=json&search={prompt}"
+    api_url = f"https://search.krea.ai/api/prompts?query={prompt}&pageSize=50&page=1"
+
+
+    fetch_2(api_url)
+    return PROMPT_URI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Original code
 
 indices = np.linspace(0, 1, num_points)
