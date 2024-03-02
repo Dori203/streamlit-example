@@ -110,7 +110,7 @@ def get_responses(prompt):
     return PROMPT_URI
 
 
-
+sentences = []
 
 def run_query():
  result_tuples = get_responses(query)
