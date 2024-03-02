@@ -112,21 +112,22 @@ def get_responses(prompt):
 
 
 
-result_tuples = get_responses(query)
-df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
-sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
-sentences = df['prompt'].values.tolist()
-image_url = df['image_URI'].values.tolist()
-samples_num = len(sentences)
-print(str(samples_num) + ' prompts')
-print (str(len(GRID_COUNTER)) + " images removed")
 
+def run_query():
+ result_tuples = get_responses(query)
+ df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+ sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+ sentences = df['prompt'].values.tolist()
+ image_url = df['image_URI'].values.tolist()
+ samples_num = len(sentences)
+ print(str(samples_num) + ' prompts')
+ print (str(len(GRID_COUNTER)) + " images removed")
+
+st.button("Run query", key=None, help=None, on_click=run_query)
 
 """
 # Welcome to The code!
 
-str(samples_num) + ' prompts'
-str(len(GRID_COUNTER)) + " images removed"
 """
 
 
