@@ -46,7 +46,7 @@ umap_embedding = False # @param {type:"boolean"}
 # num_of_clusters = 12 # @param {type:"slider", min:5, max:20, step:1}
 # TOP_WORDS =  6 # @param {type:"slider", min:1, max:10, step:1}
 
-query = st.text_input("Enter a query", "fish")
+query = st.text_input("Query", "Donald Trump")
 MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 998)
 cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
 num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
