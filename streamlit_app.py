@@ -29,6 +29,7 @@ from simpletransformers.language_representation import RepresentationModel
 
 Enter a word or phrase: Explore how AI art interprets your ideas! This app uses Stable Diffusion to find similar concepts and show different images created from them.
 """
+st.write(f'**cuda is available:** {torch.cuda.is_available()}')
 
  # params
 # query = 'fish' # @param {type:"string"}
