@@ -20,7 +20,7 @@ from dash import jupyter_dash
 from jupyter_dash import JupyterDash
 
 from dash import Dash, dcc, html, Input, Output, no_update
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import pandas as pd
 
 """
