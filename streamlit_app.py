@@ -33,7 +33,7 @@ forums](https://discuss.streamlit.io).
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
 
-// params
+ # params
 query = 'fish' # @param {type:"string"}
 # MAX_PROMPTS = 998 # @param {type:"slider", min:51, max:1000, step:1}
 # mapping = 'PLM' # @param ["PLM", "TF-IFD", "Doc2Vec"]
