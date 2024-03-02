@@ -34,7 +34,7 @@ In the meantime, below is an example of what you can do with just a few lines of
 """
 
  # params
-query = 'fish' # @param {type:"string"}
+# query = 'fish' # @param {type:"string"}
 # MAX_PROMPTS = 998 # @param {type:"slider", min:51, max:1000, step:1}
 # mapping = 'PLM' # @param ["PLM", "TF-IFD", "Doc2Vec"]
 embedding_dimension = 2 # @param {type:"slider", min:2, max:3, step:1}
@@ -46,6 +46,7 @@ umap_embedding = False # @param {type:"boolean"}
 # num_of_clusters = 12 # @param {type:"slider", min:5, max:20, step:1}
 # TOP_WORDS =  6 # @param {type:"slider", min:1, max:10, step:1}
 
+query = st.text_input("Enter a query", "fish")
 MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 998)
 cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
 num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
