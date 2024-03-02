@@ -120,8 +120,9 @@ def run_query():
  sentences = df['prompt'].values.tolist()
  image_url = df['image_URI'].values.tolist()
  samples_num = len(sentences)
- print(str(samples_num) + ' prompts')
- print (str(len(GRID_COUNTER)) + " images removed")
+ st.text("printing stuff")
+ # print(str(samples_num) + ' prompts')
+ # print (str(len(GRID_COUNTER)) + " images removed")
 
 st.button("Run query", key=None, help=None, on_click=run_query)
 
