@@ -9,14 +9,14 @@ import plotly.express as px
 import numpy as np
 import matplotlib.pyplot as plt
 import string
-!pip install simpletransformers
-!pip install umap-learn
-!pip install -U dash
+pip install simpletransformers
+pip install umap-learn
+pip install -U dash
 from dash import jupyter_dash
 import requests
 import json
 from dash import jupyter_dash
-!pip install jupyter_dash
+pip install jupyter_dash
 from jupyter_dash import JupyterDash
 
 from dash import Dash, dcc, html, Input, Output, no_update
