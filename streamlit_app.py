@@ -54,8 +54,13 @@ MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 110)
 cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
 num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
 TOP_WORDS =  st.slider("number of top words", 1, 10, 6)
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
+
+with st.container():
+    st.write("This is inside the container")
+ 
+    # You can call any Streamlit command, including custom components:
+    st.image('https://krea-prod-v1-generations.s3.us-east-1.amazonaws.com/images/8218bf04-790b-4425-84c9-8776027692c3.webp', caption='Sunrise by the mountains')
+
 
 
 
@@ -201,7 +206,7 @@ def run_query():
      st.write("This is inside the container")
   
      # You can call any Streamlit command, including custom components:
-     st.image('sunrise.jpg', caption='Sunrise by the mountains')
+     st.image('https://krea-prod-v1-generations.s3.us-east-1.amazonaws.com/images/8218bf04-790b-4425-84c9-8776027692c3.webp', caption='Sunrise by the mountains')
  
   st.text("Done")
 
