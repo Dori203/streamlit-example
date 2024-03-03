@@ -200,7 +200,7 @@ def run_query():
 
      for image in cluster_0:
       with st.container(height=120):
-       st.image(image['image_URI'], caption=image['prompt'], use_column_width =True)
+       st.image(image['image_URI'], caption=image['prompt'], width=400)
  
   st.text("Done")
 
