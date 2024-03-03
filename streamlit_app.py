@@ -202,8 +202,8 @@ def run_query():
      row2 = st.columns(3)
 
      for col in row1 + row2:
-      tile = col.container(height=120)
-      st.image(result['image_URI'], caption=result['prompt'])
+      with st.container(height=120):
+       st.image(result['image_URI'], caption=result['prompt'])
  
   st.text("Done")
 
