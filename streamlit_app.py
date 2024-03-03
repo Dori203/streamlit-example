@@ -24,7 +24,9 @@ import json
 # import plotly.graph_objects as go
 # import pandas as pd
 from simpletransformers.language_representation import RepresentationModel
-
+from sklearn.ensemble import IsolationForest
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 """
 # Stable diffusion clusterer!
 
@@ -134,9 +136,19 @@ def run_query():
  X_emb = sentence_vactor_normalized
  st.text("finished the embedding")
 
+# Step 1: Detect and remove outliers using Isolation Forest
+if remove_outliers:
+  iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
+  outlier_mask = iso_forest.fit_predict(X_emb)
+  X_emb = X_emb[outlier_mask == 1]
 
- # print(str(samples_num) + ' prompts')
- # print (str(len(GRID_COUNTER)) + " images removed")
+# Create a random dataset for demonstration
+np.random.seed(42)
+num_clusters = num_of_clusters
+kmeans = KMeans(n_clusters=num_clusters)
+cluster_labels = kmeans.fit_predict(X_emb)
+silhouette_scores = silhouette_score(X_emb, cluster_labels)
+
 
 st.button("Run query", key=None, help=None, on_click=run_query)
 
@@ -146,53 +158,8 @@ st.button("Run query", key=None, help=None, on_click=run_query)
 """
 
 
-# model_types = bert, robeta, gpt2
-# model_name = roberta-base, gpt2-medium,
-def run_plm():
- model = RepresentationModel(
-         model_type="roberta",
-         model_name="roberta-base",
-         use_cuda=False
-         )
- sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
- norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
- sentence_vactor_normalized = sentence_vectors / norm[:,None]
- sentences_np = np.array(sentences, dtype=object)
- image_urls_np = np.array(image_url, dtype=object)
- meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
- X_emb = sentence_vactor_normalized
-
-st.button("Run embedding", key=None, help=None, on_click=run_plm)
 
 
 
 
 
-
-
-
-
-# Original code
-
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
-
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
-
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
-
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
