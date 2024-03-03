@@ -113,49 +113,49 @@ def get_responses(prompt):
 
 
 def run_query():
- result_tuples = get_responses(query)
- df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
- sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
- sentences = df['prompt'].values.tolist()
- image_url = df['image_URI'].values.tolist()
- samples_num = len(sentences)
- st.text("printing stuff")
- st.text(str(samples_num) + " prompts")
- st.text(str(len(GRID_COUNTER)) + " images removed")
- model = RepresentationModel(
-         model_type="roberta",
-         model_name="roberta-base",
-         use_cuda=False
-         )
- sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
- norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
- sentence_vactor_normalized = sentence_vectors / norm[:,None]
- sentences_np = np.array(sentences, dtype=object)
- image_urls_np = np.array(image_url, dtype=object)
- meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
- X_emb = sentence_vactor_normalized
- st.text("finished the embedding")
-
- # Step 1: Detect and remove outliers using Isolation Forest
- if remove_outliers:
-   iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
-   outlier_mask = iso_forest.fit_predict(X_emb)
-   X_emb = X_emb[outlier_mask == 1]
+  result_tuples = get_responses(query)
+  df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+  sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+  sentences = df['prompt'].values.tolist()
+  image_url = df['image_URI'].values.tolist()
+  samples_num = len(sentences)
+  st.text("printing stuff")
+  st.text(str(samples_num) + " prompts")
+  st.text(str(len(GRID_COUNTER)) + " images removed")
+  model = RepresentationModel(
+          model_type="roberta",
+          model_name="roberta-base",
+          use_cuda=False
+          )
+  sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
+  norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
+  sentence_vactor_normalized = sentence_vectors / norm[:,None]
+  sentences_np = np.array(sentences, dtype=object)
+  image_urls_np = np.array(image_url, dtype=object)
+  meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
+  X_emb = sentence_vactor_normalized
+  st.text("finished the embedding")
  
- # Create a random dataset for demonstration
- np.random.seed(42)
- num_clusters = num_of_clusters
- kmeans = KMeans(n_clusters=num_clusters)
- cluster_labels = kmeans.fit_predict(X_emb)
- silhouette_scores = silhouette_score(X_emb, cluster_labels)
+  # Step 1: Detect and remove outliers using Isolation Forest
+  if remove_outliers:
+    iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
+    outlier_mask = iso_forest.fit_predict(X_emb)
+    X_emb = X_emb[outlier_mask == 1]
+  
+  # Create a random dataset for demonstration
+  np.random.seed(42)
+  num_clusters = num_of_clusters
+  kmeans = KMeans(n_clusters=num_clusters)
+  cluster_labels = kmeans.fit_predict(X_emb)
+  silhouette_scores = silhouette_score(X_emb, cluster_labels)
 
 
- st.button("Run query", key=None, help=None, on_click=run_query)
+st.button("Run query", key=None, help=None, on_click=run_query)
 
- """
- # Welcome to The code!
- 
- """
+"""
+# Welcome to The code!
+
+"""
 
 
 
