@@ -195,11 +195,15 @@ def run_query():
   
   with st.container():
      st.write("This is inside the container")
-
      result = grouped['data'][0][0]
-   
-     # You can call any Streamlit command, including custom components:
-     st.image(result['image_URI'], caption=result['prompt'])
+
+
+     row1 = st.columns(3)
+     row2 = st.columns(3)
+
+     for col in row1 + row2:
+      tile = col.container(height=120)
+      st.image(result['image_URI'], caption=result['prompt'])
  
   st.text("Done")
 
