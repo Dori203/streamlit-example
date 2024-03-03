@@ -199,7 +199,8 @@ def run_query():
      result = grouped['data'][0][0]
 
      for image in cluster_0:
-      with st.container(height=500):
+      with st.columns():
+      # with st.container(height=500):
        st.image(image['image_URI'], caption=image['prompt'], width=350)
  
   st.text("Done")
