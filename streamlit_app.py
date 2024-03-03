@@ -196,7 +196,13 @@ def run_query():
   grouped = df.groupby('cluster').apply(lambda x: x.to_dict(orient='records')).reset_index()
   # del grouped['cluster']
   grouped.columns = ['cluster', 'data']
-
+  
+  with st.container():
+     st.write("This is inside the container")
+  
+     # You can call any Streamlit command, including custom components:
+     st.image('sunrise.jpg', caption='Sunrise by the mountains')
+ 
   st.text("Done")
 
 st.button("Run query", key=None, help=None, on_click=run_query)
