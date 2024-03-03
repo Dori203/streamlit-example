@@ -199,7 +199,7 @@ def run_query():
      result = grouped['data'][0][0]
 
      columns = st.columns(len(cluster_0))
-     for i, image in enum(cluster_0):
+     for i, image in enumerate(cluster_0):
       columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
  
   st.text("Done")
