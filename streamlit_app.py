@@ -41,7 +41,7 @@ st.write(f'**cuda is available:** {torch.cuda.is_available()}')
 embedding_dimension = 2 # @param {type:"slider", min:2, max:3, step:1}
 use_modifiers = True # @param {type:"boolean"}
 join_modifiers = False # @param {type:"boolean"}
-remove_outliers = False # @param {type:"boolean"}
+remove_outliers = True # @param {type:"boolean"}
 umap_embedding = False # @param {type:"boolean"}
 # cluster_threshold = 0.15 # @param {type:"slider", min:0.05, max:1, step:0.05}
 # num_of_clusters = 12 # @param {type:"slider", min:5, max:20, step:1}
