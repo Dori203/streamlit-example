@@ -191,6 +191,11 @@ def run_query():
   # Add top words to DataFrame
   meanings['cluster_label'] = top_words_per_document
   meanings['cluster_label'] = meanings['cluster_label'].apply(lambda x: ', '.join(x))
+  cluster_description = meanings['cluster_label'].values.tolist()
+  df = meanings_all.merge(meanings.drop(columns=['text']), on='cluster')
+  grouped = df.groupby('cluster').apply(lambda x: x.to_dict(orient='records')).reset_index()
+  # del grouped['cluster']
+  grouped.columns = ['cluster', 'data']
 
   st.text("Done")
 
