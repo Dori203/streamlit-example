@@ -203,7 +203,7 @@ def run_query():
 
      for col in row1 + row2:
       with st.container(height=120):
-       st.image(result['image_URI'], caption=result['prompt'])
+       st.image(result['image_URI'], caption=result['prompt'], use_column_width =True)
  
   st.text("Done")
 
