@@ -114,13 +114,27 @@ def run_query():
  result_tuples = get_responses(query)
  df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
  sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
- global sentences
  sentences = df['prompt'].values.tolist()
  image_url = df['image_URI'].values.tolist()
  samples_num = len(sentences)
  st.text("printing stuff")
  st.text(str(samples_num) + " prompts")
  st.text(str(len(GRID_COUNTER)) + " images removed")
+  model = RepresentationModel(
+         model_type="roberta",
+         model_name="roberta-base",
+         use_cuda=False
+         )
+ sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
+ norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
+ sentence_vactor_normalized = sentence_vectors / norm[:,None]
+ sentences_np = np.array(sentences, dtype=object)
+ image_urls_np = np.array(image_url, dtype=object)
+ meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
+ X_emb = sentence_vactor_normalized
+ st.text("finished the embedding")
+
+
  # print(str(samples_num) + ' prompts')
  # print (str(len(GRID_COUNTER)) + " images removed")
 
