@@ -27,6 +27,8 @@ from simpletransformers.language_representation import RepresentationModel
 from sklearn.ensemble import IsolationForest
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 """
 # Stable diffusion clusterer!
 
@@ -149,6 +151,48 @@ def run_query():
   cluster_labels = kmeans.fit_predict(X_emb)
   silhouette_scores = silhouette_score(X_emb, cluster_labels)
 
+
+  st.text("Get Top X by Centroid Distnace")
+
+  # Get Top X by Centroid Distnace
+  cluster_centers = kmeans.cluster_centers_
+  distances = np.linalg.norm(X_emb - cluster_centers[cluster_labels], axis=1)
+  cluster_selection_mask = distances < cluster_threshold
+  if remove_outliers:
+    meanings_all = meanings_all[outlier_mask == 1]
+    meanings_all = meanings_all[cluster_selection_mask]
+    cluster_labels = cluster_labels[cluster_selection_mask]
+  
+  meanings_all['cluster'] = cluster_labels
+  meanings = meanings_all.groupby('cluster').apply(lambda x: " ".join(x['prompt'])).rename('text').reset_index()
+  
+   # Initialize the TF-IDF vectorizer
+  tfidf_vectorizer = TfidfVectorizer(use_idf=True, min_df=0.15, max_df=0.85)
+  
+  # Fit and transform the text column
+  tfidf_matrix = tfidf_vectorizer.fit_transform(meanings['text'])
+  # tfidf_matrix = tfidf_vectorizer.fit_transform(testCorpus)
+  
+  
+  # Get feature names (words)
+  feature_names = tfidf_vectorizer.get_feature_names_out()
+  
+  # Convert TF-IDF matrix to an array
+  tfidf_array = tfidf_matrix.toarray()
+  
+  # Find the top 5 words based on their importance in each document
+  top_words_per_document = []
+  for doc_tfidf in tfidf_array:
+      # Sort indices based on TF-IDF values in descending order
+      sorted_indices = (-doc_tfidf).argsort()[:TOP_WORDS]  # Get the indices of the top 5 terms
+      top_words = [feature_names[idx] for idx in sorted_indices]
+      top_words_per_document.append(top_words)
+  
+  # Add top words to DataFrame
+  meanings['cluster_label'] = top_words_per_document
+  meanings['cluster_label'] = meanings['cluster_label'].apply(lambda x: ', '.join(x))
+
+  st.text("Done")
 
 st.button("Run query", key=None, help=None, on_click=run_query)
 
