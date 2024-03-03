@@ -120,7 +120,7 @@ def run_query():
  st.text("printing stuff")
  st.text(str(samples_num) + " prompts")
  st.text(str(len(GRID_COUNTER)) + " images removed")
-  model = RepresentationModel(
+ model = RepresentationModel(
          model_type="roberta",
          model_name="roberta-base",
          use_cuda=False
