@@ -110,13 +110,12 @@ def get_responses(prompt):
     return PROMPT_URI
 
 
-sentences = []
-
 def run_query():
  result_tuples = get_responses(query)
  df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
  sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
- global sentences = df['prompt'].values.tolist()
+ global sentences
+ sentences = df['prompt'].values.tolist()
  image_url = df['image_URI'].values.tolist()
  samples_num = len(sentences)
  st.text("printing stuff")
