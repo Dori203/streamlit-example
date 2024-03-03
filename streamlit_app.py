@@ -136,26 +136,26 @@ def run_query():
  X_emb = sentence_vactor_normalized
  st.text("finished the embedding")
 
-# Step 1: Detect and remove outliers using Isolation Forest
-if remove_outliers:
-  iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
-  outlier_mask = iso_forest.fit_predict(X_emb)
-  X_emb = X_emb[outlier_mask == 1]
+ # Step 1: Detect and remove outliers using Isolation Forest
+ if remove_outliers:
+   iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
+   outlier_mask = iso_forest.fit_predict(X_emb)
+   X_emb = X_emb[outlier_mask == 1]
+ 
+ # Create a random dataset for demonstration
+ np.random.seed(42)
+ num_clusters = num_of_clusters
+ kmeans = KMeans(n_clusters=num_clusters)
+ cluster_labels = kmeans.fit_predict(X_emb)
+ silhouette_scores = silhouette_score(X_emb, cluster_labels)
 
-# Create a random dataset for demonstration
-np.random.seed(42)
-num_clusters = num_of_clusters
-kmeans = KMeans(n_clusters=num_clusters)
-cluster_labels = kmeans.fit_predict(X_emb)
-silhouette_scores = silhouette_score(X_emb, cluster_labels)
 
+ st.button("Run query", key=None, help=None, on_click=run_query)
 
-st.button("Run query", key=None, help=None, on_click=run_query)
-
-"""
-# Welcome to The code!
-
-"""
+ """
+ # Welcome to The code!
+ 
+ """
 
 
 
