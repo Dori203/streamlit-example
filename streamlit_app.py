@@ -195,15 +195,12 @@ def run_query():
   
   with st.container():
      st.write("This is inside the container")
+     cluster_0 = grouped['data'][0]
      result = grouped['data'][0][0]
 
-
-     row1 = st.columns(3)
-     row2 = st.columns(3)
-
-     for col in row1 + row2:
+     for image in cluster_0:
       with st.container(height=120):
-       st.image(result['image_URI'], caption=result['prompt'], use_column_width =True)
+       st.image(image['image_URI'], caption=image['prompt'], use_column_width =True)
  
   st.text("Done")
 
