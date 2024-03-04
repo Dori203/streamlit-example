@@ -208,7 +208,7 @@ def run_query():
     tab.write(cluster_description[i])
     row_size = 4
     col = 0
-    grid = st.columns(row_size)
+    grid = tab.columns(row_size)
     for image in cluster:
         with grid[col]:
             st.image(image['image_URI'], caption=image['prompt'])
