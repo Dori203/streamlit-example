@@ -203,7 +203,7 @@ def run_query():
 
    
    tabs = [tab1, tab2, tab3, tab4, tab5]
-   for i, tab in tabs:
+   for i, tab in enumerate(tabs):
     cluster = grouped['data'][i]
     tab.write(cluster_description[i])
     row_size = 4
