@@ -199,19 +199,31 @@ def run_query():
    grouped.columns = ['cluster', 'data']
    col = 0
  
-   tab1, tab2 = st.tabs(["1", "2"])
- 
-   with tab1:
-      cluster_0 = grouped['data'][0]
-      result = grouped['data'][0][0]
-      st.write(cluster_description[0])
-      row_size = 4
-      col = 0
-      grid = st.columns(row_size)
-      for image in cluster_0:
-          with grid[col]:
-              st.image(image['image_URI'], caption=image['prompt'])
-          col = (col + 1) % row_size
+   tab1, tab2, tab3, tab4, tab5 = st.tabs(["1", "2", "3", "4", "5"])
+
+   tabs = [tab1, tab2, tab3, tab4, tab5]
+   for i, tab in enumerate(tabs):
+    cluster = grouped['data'][i]
+    tab.write(cluster_description[i])
+    row_size = 4
+    col = 0
+    grid = st.columns(row_size)
+    for image in cluster:
+        with grid[col]:
+            st.image(image['image_URI'], caption=image['prompt'])
+        col = (col + 1) % row_size
+     
+   # with tab1:
+   #    cluster_0 = grouped['data'][0]
+   #    result = grouped['data'][0][0]
+   #    st.write(cluster_description[0])
+   #    row_size = 4
+   #    col = 0
+   #    grid = st.columns(row_size)
+   #    for image in cluster_0:
+   #        with grid[col]:
+   #            st.image(image['image_URI'], caption=image['prompt'])
+   #        col = (col + 1) % row_size
  
     
       
