@@ -206,7 +206,7 @@ def run_query():
      row_size = 4
      col = 0
      grid = st.columns(row_size)
-     for image in result:
+     for image in cluster_0:
          with grid[col]:
              st.image(image['image_URI'], caption=image['prompt'])
          col = (col + 1) % row_size
