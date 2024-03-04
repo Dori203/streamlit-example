@@ -199,10 +199,10 @@ def run_query():
    grouped.columns = ['cluster', 'data']
    col = 0
 
-   tab1, tab2, tab3, tab4, tab5 = st.tabs(["1", "2", "3", "4", "5"])
+   # tab1, tab2, tab3, tab4, tab5 = 
 
    
-   tabs = [tab1, tab2, tab3, tab4, tab5]
+   tabs = st.tabs(["1", "2", "3", "4", "5"])
    for i, tab in enumerate(tabs):
     cluster = grouped['data'][i]
     tab.write(cluster_description[i])
