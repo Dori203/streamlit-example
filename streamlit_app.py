@@ -198,13 +198,15 @@ def run_query():
    # del grouped['cluster']
    grouped.columns = ['cluster', 'data']
    col = 0
- 
+
+   num_of_clusters = len(grouped['data'])
    tab1, tab2, tab3, tab4, tab5 = st.tabs(["1", "2", "3", "4", "5"])
 
+   
    tabs = [tab1, tab2, tab3, tab4, tab5]
-   for i in range(len(tabs)):
+   for i, tab in tabs:
     cluster = grouped['data'][i]
-    tab[i].write(cluster_description[i])
+    tab.write(cluster_description[i])
     row_size = 4
     col = 0
     grid = st.columns(row_size)
