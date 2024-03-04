@@ -198,7 +198,9 @@ def run_query():
   grouped.columns = ['cluster', 'data']
   col = 0
 
-  with st.container():
+  tab1, tab2 = st.tabs(["1", "2"])
+
+  with tab1():
      cluster_0 = grouped['data'][0]
      result = grouped['data'][0][0]
      st.write(cluster_description[0])
