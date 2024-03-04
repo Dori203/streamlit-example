@@ -108,7 +108,12 @@ def get_responses(prompt):
 
     fetch_2(api_url)
     return PROMPT_URI
-
+ 
+def update (image, col): 
+    df.at[image,col] = st.session_state[f'{col}_{image}']
+    if st.session_state[f'incorrect_{image}'] == False:
+       st.session_state[f'label_{image}'] = ''
+       df.at[image,'label'] = ''
 
 def run_query():
   result_tuples = get_responses(query)
@@ -192,15 +197,28 @@ def run_query():
   grouped = df.groupby('cluster').apply(lambda x: x.to_dict(orient='records')).reset_index()
   # del grouped['cluster']
   grouped.columns = ['cluster', 'data']
-  
+  col = 0
+
   with st.container():
-     st.write("This is inside the container")
      cluster_0 = grouped['data'][0]
      result = grouped['data'][0][0]
+     st.write("This is inside the container")
+     batch_size = 10
+     row_size = 4
+     num_batches = ceil(len(result)/batch_size)
+     col = 0
+     grid = st.columns(row_size)
+     for image in result:
+         with grid[col]:
+             st.image(image['image_URI'], caption=image['prompt'])
+         col = (col + 1) % row_size
 
-     columns = st.columns(len(cluster_0))
-     for i, image in enumerate(cluster_0):
-      columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
+   
+     
+
+     # columns = st.columns(len(cluster_0))
+     # for i, image in enumerate(cluster_0):
+     #  columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
  
   st.text("Done")
 
