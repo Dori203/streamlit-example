@@ -201,7 +201,7 @@ def run_query():
   with st.container():
      cluster_0 = grouped['data'][0]
      result = grouped['data'][0][0]
-     st.write("This is inside the container")
+     st.write(cluster_description[0])
      row_size = 4
      col = 0
      grid = st.columns(row_size)
@@ -217,8 +217,6 @@ def run_query():
      # for i, image in enumerate(cluster_0):
      #  columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
  
-  st.text("Done")
-
 st.button("Run query", key=None, help=None, on_click=run_query)
 
 
