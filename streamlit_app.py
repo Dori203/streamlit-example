@@ -202,7 +202,7 @@ def run_query():
    tab1, tab2, tab3, tab4, tab5 = st.tabs(["1", "2", "3", "4", "5"])
 
    tabs = [tab1, tab2, tab3, tab4, tab5]
-   for i in len(tabs):
+   for i in range(len(tabs)):
     cluster = grouped['data'][i]
     tab[i].write(cluster_description[i])
     row_size = 4
