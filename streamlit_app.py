@@ -203,9 +203,7 @@ def run_query():
      cluster_0 = grouped['data'][0]
      result = grouped['data'][0][0]
      st.write("This is inside the container")
-     batch_size = 10
      row_size = 4
-     num_batches = ceil(len(result)/batch_size)
      col = 0
      grid = st.columns(row_size)
      for image in result:
