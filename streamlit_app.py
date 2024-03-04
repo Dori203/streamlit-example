@@ -115,110 +115,111 @@ def update (image, col):
        df.at[image,'label'] = ''
 
 def run_query():
-  result_tuples = get_responses(query)
-  df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
-  sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
-  sentences = df['prompt'].values.tolist()
-  image_url = df['image_URI'].values.tolist()
-  samples_num = len(sentences)
-  # st.text("printing stuff")
-  # st.text(str(samples_num) + " prompts")
-  # st.text(str(len(GRID_COUNTER)) + " images removed")
-  model = RepresentationModel(
-          model_type="roberta",
-          model_name="roberta-base",
-          use_cuda=False
-          )
-  sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
-  norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
-  sentence_vactor_normalized = sentence_vectors / norm[:,None]
-  sentences_np = np.array(sentences, dtype=object)
-  image_urls_np = np.array(image_url, dtype=object)
-  meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
-  X_emb = sentence_vactor_normalized
-  # st.text("finished the embedding")
- 
-  # Step 1: Detect and remove outliers using Isolation Forest
-  if remove_outliers:
-    iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
-    outlier_mask = iso_forest.fit_predict(X_emb)
-    X_emb = X_emb[outlier_mask == 1]
+  with st.spinner('Wait for it...'):
+   result_tuples = get_responses(query)
+   df = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+   sentences_and_images = pd.DataFrame(result_tuples, columns=["prompt", "image_URI"])
+   sentences = df['prompt'].values.tolist()
+   image_url = df['image_URI'].values.tolist()
+   samples_num = len(sentences)
+   # st.text("printing stuff")
+   # st.text(str(samples_num) + " prompts")
+   # st.text(str(len(GRID_COUNTER)) + " images removed")
+   model = RepresentationModel(
+           model_type="roberta",
+           model_name="roberta-base",
+           use_cuda=False
+           )
+   sentence_vectors = model.encode_sentences(sentences, combine_strategy="mean")
+   norm = np.linalg.norm(sentence_vectors, ord=2, axis=1)
+   sentence_vactor_normalized = sentence_vectors / norm[:,None]
+   sentences_np = np.array(sentences, dtype=object)
+   image_urls_np = np.array(image_url, dtype=object)
+   meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
+   X_emb = sentence_vactor_normalized
+   # st.text("finished the embedding")
   
-  # Create a random dataset for demonstration
-  np.random.seed(42)
-  num_clusters = num_of_clusters
-  kmeans = KMeans(n_clusters=num_clusters)
-  cluster_labels = kmeans.fit_predict(X_emb)
-  silhouette_scores = silhouette_score(X_emb, cluster_labels)
-
-
-  # st.text("Get Top X by Centroid Distnace")
-
-  # Get Top X by Centroid Distnace
-  cluster_centers = kmeans.cluster_centers_
-  distances = np.linalg.norm(X_emb - cluster_centers[cluster_labels], axis=1)
-  cluster_selection_mask = distances < cluster_threshold
-  if remove_outliers:
-    meanings_all = meanings_all[outlier_mask == 1]
-    meanings_all = meanings_all[cluster_selection_mask]
-    cluster_labels = cluster_labels[cluster_selection_mask]
-  
-  meanings_all['cluster'] = cluster_labels
-  meanings = meanings_all.groupby('cluster').apply(lambda x: " ".join(x['prompt'])).rename('text').reset_index()
-  
-   # Initialize the TF-IDF vectorizer
-  tfidf_vectorizer = TfidfVectorizer(use_idf=True, min_df=0.15, max_df=0.85)
-  
-  # Fit and transform the text column
-  tfidf_matrix = tfidf_vectorizer.fit_transform(meanings['text'])
-  # tfidf_matrix = tfidf_vectorizer.fit_transform(testCorpus)
-  
-  
-  # Get feature names (words)
-  feature_names = tfidf_vectorizer.get_feature_names_out()
-  
-  # Convert TF-IDF matrix to an array
-  tfidf_array = tfidf_matrix.toarray()
-  
-  # Find the top 5 words based on their importance in each document
-  top_words_per_document = []
-  for doc_tfidf in tfidf_array:
-      # Sort indices based on TF-IDF values in descending order
-      sorted_indices = (-doc_tfidf).argsort()[:TOP_WORDS]  # Get the indices of the top 5 terms
-      top_words = [feature_names[idx] for idx in sorted_indices]
-      top_words_per_document.append(top_words)
-  
-  # Add top words to DataFrame
-  meanings['cluster_label'] = top_words_per_document
-  meanings['cluster_label'] = meanings['cluster_label'].apply(lambda x: ', '.join(x))
-  cluster_description = meanings['cluster_label'].values.tolist()
-  df = meanings_all.merge(meanings.drop(columns=['text']), on='cluster')
-  grouped = df.groupby('cluster').apply(lambda x: x.to_dict(orient='records')).reset_index()
-  # del grouped['cluster']
-  grouped.columns = ['cluster', 'data']
-  col = 0
-
-  tab1, tab2 = st.tabs(["1", "2"])
-
-  with tab1:
-     cluster_0 = grouped['data'][0]
-     result = grouped['data'][0][0]
-     st.write(cluster_description[0])
-     row_size = 4
-     col = 0
-     grid = st.columns(row_size)
-     for image in cluster_0:
-         with grid[col]:
-             st.image(image['image_URI'], caption=image['prompt'])
-         col = (col + 1) % row_size
-
+   # Step 1: Detect and remove outliers using Isolation Forest
+   if remove_outliers:
+     iso_forest = IsolationForest(contamination=0.5)  # Adjust contamination based on your dataset
+     outlier_mask = iso_forest.fit_predict(X_emb)
+     X_emb = X_emb[outlier_mask == 1]
    
-     
-
-     # columns = st.columns(len(cluster_0))
-     # for i, image in enumerate(cluster_0):
-     #  columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
+   # Create a random dataset for demonstration
+   np.random.seed(42)
+   num_clusters = num_of_clusters
+   kmeans = KMeans(n_clusters=num_clusters)
+   cluster_labels = kmeans.fit_predict(X_emb)
+   silhouette_scores = silhouette_score(X_emb, cluster_labels)
  
+ 
+   # st.text("Get Top X by Centroid Distnace")
+ 
+   # Get Top X by Centroid Distnace
+   cluster_centers = kmeans.cluster_centers_
+   distances = np.linalg.norm(X_emb - cluster_centers[cluster_labels], axis=1)
+   cluster_selection_mask = distances < cluster_threshold
+   if remove_outliers:
+     meanings_all = meanings_all[outlier_mask == 1]
+     meanings_all = meanings_all[cluster_selection_mask]
+     cluster_labels = cluster_labels[cluster_selection_mask]
+   
+   meanings_all['cluster'] = cluster_labels
+   meanings = meanings_all.groupby('cluster').apply(lambda x: " ".join(x['prompt'])).rename('text').reset_index()
+   
+    # Initialize the TF-IDF vectorizer
+   tfidf_vectorizer = TfidfVectorizer(use_idf=True, min_df=0.15, max_df=0.85)
+   
+   # Fit and transform the text column
+   tfidf_matrix = tfidf_vectorizer.fit_transform(meanings['text'])
+   # tfidf_matrix = tfidf_vectorizer.fit_transform(testCorpus)
+   
+   
+   # Get feature names (words)
+   feature_names = tfidf_vectorizer.get_feature_names_out()
+   
+   # Convert TF-IDF matrix to an array
+   tfidf_array = tfidf_matrix.toarray()
+   
+   # Find the top 5 words based on their importance in each document
+   top_words_per_document = []
+   for doc_tfidf in tfidf_array:
+       # Sort indices based on TF-IDF values in descending order
+       sorted_indices = (-doc_tfidf).argsort()[:TOP_WORDS]  # Get the indices of the top 5 terms
+       top_words = [feature_names[idx] for idx in sorted_indices]
+       top_words_per_document.append(top_words)
+   
+   # Add top words to DataFrame
+   meanings['cluster_label'] = top_words_per_document
+   meanings['cluster_label'] = meanings['cluster_label'].apply(lambda x: ', '.join(x))
+   cluster_description = meanings['cluster_label'].values.tolist()
+   df = meanings_all.merge(meanings.drop(columns=['text']), on='cluster')
+   grouped = df.groupby('cluster').apply(lambda x: x.to_dict(orient='records')).reset_index()
+   # del grouped['cluster']
+   grouped.columns = ['cluster', 'data']
+   col = 0
+ 
+   tab1, tab2 = st.tabs(["1", "2"])
+ 
+   with tab1:
+      cluster_0 = grouped['data'][0]
+      result = grouped['data'][0][0]
+      st.write(cluster_description[0])
+      row_size = 4
+      col = 0
+      grid = st.columns(row_size)
+      for image in cluster_0:
+          with grid[col]:
+              st.image(image['image_URI'], caption=image['prompt'])
+          col = (col + 1) % row_size
+ 
+    
+      
+ 
+      # columns = st.columns(len(cluster_0))
+      # for i, image in enumerate(cluster_0):
+      #  columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
+ st.success('Done!')
 st.button("Run query", key=None, help=None, on_click=run_query)
 
 
