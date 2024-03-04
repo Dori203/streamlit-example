@@ -25,7 +25,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 Enter a word or phrase: Explore how AI art interprets your ideas! This app uses Stable Diffusion to find similar concepts and show different images created from them.
 """
-st.write(f'**cuda is available:** {torch.cuda.is_available()}')
 
  # params
 # query = 'fish' # @param {type:"string"}
@@ -42,7 +41,7 @@ umap_embedding = False # @param {type:"boolean"}
 
 query = st.text_input("Query", "Donald Trump")
 
-with st.expander("See explanation"):
+with st.expander("Parameters"):
  global MAX_PROMPTS
  global cluster_threshold
  global num_of_clusters
@@ -222,10 +221,6 @@ def run_query():
 
 st.button("Run query", key=None, help=None, on_click=run_query)
 
-"""
-# Welcome to The code!
-
-"""
 
 
 
