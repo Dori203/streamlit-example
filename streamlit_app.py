@@ -219,7 +219,7 @@ def run_query():
       # columns = st.columns(len(cluster_0))
       # for i, image in enumerate(cluster_0):
       #  columns[i].image(image['image_URI'], caption=image['prompt'], width=350)
- st.success('Done!')
+  st.success('Done!')
 st.button("Run query", key=None, help=None, on_click=run_query)
 
 
