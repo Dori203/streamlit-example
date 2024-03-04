@@ -199,7 +199,6 @@ def run_query():
    grouped.columns = ['cluster', 'data']
    col = 0
 
-   num_of_clusters = len(grouped['data'])
    tab1, tab2, tab3, tab4, tab5 = st.tabs(["1", "2", "3", "4", "5"])
 
    
