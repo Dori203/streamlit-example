@@ -6,23 +6,14 @@ import streamlit as st
 import torch
 
 import pandas as pd
-# import plotly.express as px
 import numpy as np
-# import matplotlib.pyplot as plt
 import string
-# pip install simpletransformers
-# pip install umap-learn
-# pip install -U dash
-# from dash import jupyter_dash
+
 import requests
 import json
-# from dash import jupyter_dash
-# pip install jupyter_dash
-# from jupyter_dash import JupyterDash
 
-# from dash import Dash, dcc, html, Input, Output, no_update
-# import plotly.graph_objects as go
-# import pandas as pd
+
+
 from simpletransformers.language_representation import RepresentationModel
 from sklearn.ensemble import IsolationForest
 from sklearn.cluster import KMeans
@@ -50,10 +41,19 @@ umap_embedding = False # @param {type:"boolean"}
 # TOP_WORDS =  6 # @param {type:"slider", min:1, max:10, step:1}
 
 query = st.text_input("Query", "Donald Trump")
-MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 110)
-cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
-num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
-TOP_WORDS =  st.slider("number of top words", 1, 10, 6)
+
+with st.expander("See explanation"):
+ global MAX_PROMPTS
+ global cluster_threshold
+ global num_of_clusters
+ global TOP_WORDS
+
+ MAX_PROMPTS = st.slider("Maximum prompts", 1, 1000, 110)
+ cluster_threshold = st.slider("Cluster threshole", 0.05, 1.00, 0.15)
+ num_of_clusters = st.slider("number_of_clusters", 5, 20, 12)
+ TOP_WORDS =  st.slider("number of top words", 1, 10, 6)
+
+
 
 PROMPT_URI = []
 GRID_COUNTER = []
@@ -122,9 +122,9 @@ def run_query():
   sentences = df['prompt'].values.tolist()
   image_url = df['image_URI'].values.tolist()
   samples_num = len(sentences)
-  st.text("printing stuff")
-  st.text(str(samples_num) + " prompts")
-  st.text(str(len(GRID_COUNTER)) + " images removed")
+  # st.text("printing stuff")
+  # st.text(str(samples_num) + " prompts")
+  # st.text(str(len(GRID_COUNTER)) + " images removed")
   model = RepresentationModel(
           model_type="roberta",
           model_name="roberta-base",
@@ -137,7 +137,7 @@ def run_query():
   image_urls_np = np.array(image_url, dtype=object)
   meanings_all = pd.DataFrame(sentences_and_images, columns=['prompt', 'image_URI'])
   X_emb = sentence_vactor_normalized
-  st.text("finished the embedding")
+  # st.text("finished the embedding")
  
   # Step 1: Detect and remove outliers using Isolation Forest
   if remove_outliers:
@@ -153,7 +153,7 @@ def run_query():
   silhouette_scores = silhouette_score(X_emb, cluster_labels)
 
 
-  st.text("Get Top X by Centroid Distnace")
+  # st.text("Get Top X by Centroid Distnace")
 
   # Get Top X by Centroid Distnace
   cluster_centers = kmeans.cluster_centers_
