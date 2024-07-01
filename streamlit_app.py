@@ -15,7 +15,7 @@ import json
 
 
 from simpletransformers.language_representation import RepresentationModel
-from sklearn.ensemble import IsolationForest
+# from sklearn.ensemble import IsolationForest
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -159,10 +159,10 @@ def run_query():
    cluster_centers = kmeans.cluster_centers_
    distances = np.linalg.norm(X_emb - cluster_centers[cluster_labels], axis=1)
    cluster_selection_mask = distances < cluster_threshold
-   if remove_outliers:
-     meanings_all = meanings_all[outlier_mask == 1]
-     meanings_all = meanings_all[cluster_selection_mask]
-     cluster_labels = cluster_labels[cluster_selection_mask]
+   # if remove_outliers: #Removed due to dependency failure.
+   #   meanings_all = meanings_all[outlier_mask == 1]
+   #   meanings_all = meanings_all[cluster_selection_mask]
+   #   cluster_labels = cluster_labels[cluster_selection_mask]
    
    meanings_all['cluster'] = cluster_labels
    meanings = meanings_all.groupby('cluster').apply(lambda x: " ".join(x['prompt'])).rename('text').reset_index()
