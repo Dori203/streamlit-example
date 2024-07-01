@@ -3,6 +3,5 @@ pandas
 streamlit
 simpletransformers
 torch
-sklearn.ensemble
 sklearn.cluster
 sklearn.metrics
